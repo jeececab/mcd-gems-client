@@ -1,6 +1,6 @@
 <script>
   import { getClient, mutate } from 'svelte-apollo';
-  import { REGISTER_USER } from '../graphql/queries';
+  import { REGISTER_USER } from '../graphql/mutations';
 
   const client = getClient();
   let name = '';
