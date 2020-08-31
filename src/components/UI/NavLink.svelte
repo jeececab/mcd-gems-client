@@ -1,7 +1,7 @@
 <script>
   import { link } from 'svelte-routing';
   import { createEventDispatcher } from 'svelte';
-  import { currentPage } from '../../store/index.js';
+  import { currentPage } from '../../store';
 
   const dispatch = createEventDispatcher();
 

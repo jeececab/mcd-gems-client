@@ -1,9 +1,8 @@
 <script>
   import NavLink from './NavLink.svelte';
+  import { auth } from '../../store';
 
   let displayMenu = false;
-  // TODO:
-  let isAuthenticated = false;
 
   function toggleDisplayMenu() {
     displayMenu = !displayMenu;
@@ -158,7 +157,7 @@
   <div on:click={toggleDisplayMenu} class="backdrop {displayMenu ? 'show' : ''}" />
 
   <nav class="nav {displayMenu ? 'activeMenu' : ''}">
-    {#if isAuthenticated}
+    {#if $auth.logged}
       <ul class="navList">
         <li>
           <NavLink to="/" on:clickedLink={closeMenu}>Home</NavLink>
@@ -175,9 +174,7 @@
         <li>
           <NavLink to="/account" on:clickedLink={closeMenu}>Account</NavLink>
         </li>
-        <li class="logoutLi">
-          <button on:click={logout} class="btn btn-primary--outline">Log out</button>
-        </li>
+        <li class="logoutLi"><button on:click={logout} class="btn btn-primary--outline">Log out</button></li>
       </ul>
     {:else}
       <ul class="navList">
@@ -194,5 +191,4 @@
       </div>
     {/if}
   </nav>
-
 </div>
