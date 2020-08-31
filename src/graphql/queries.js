@@ -12,3 +12,16 @@ export const REGISTER_USER = gql`
     }
   }
 `;
+
+export const LOGIN_USER = gql`
+  mutation LoginUser($password: String!, $email: String!) {
+    loginUser(password: $password, email: $email) {
+      user {
+        id
+        name
+        email
+      }
+      error
+    }
+  }
+`;

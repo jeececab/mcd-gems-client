@@ -1,6 +1,5 @@
 <script>
-  import { link } from 'svelte-routing';
-  // let pageName = 'Home Page';
+  import NavLink from '../components/UI/NavLink.svelte';
 </script>
 
 <style>
@@ -35,18 +34,6 @@
     text-transform: uppercase;
     margin: 0;
   }
-
-  .signup {
-    background: var(--red);
-    border-radius: 50px;
-    display: inline-block;
-    color: var(--white);
-    font-size: 1.5rem;
-    text-align: center;
-    text-decoration: none;
-    margin: 2em auto;
-    padding: 0.5em 1em;
-  }
 </style>
 
 <div class="container">
@@ -60,6 +47,6 @@
       <p>Share your created programs and drills with others.</p>
       <p>Vote for the best ones to help others choose well.</p>
     </div>
-    <a href="/signup" use:link class="signup">Start Training</a>
+    <NavLink to="/signup" customClass="btn btn-primary btn-primary--large">Start Training</NavLink>
   </section>
 </div>

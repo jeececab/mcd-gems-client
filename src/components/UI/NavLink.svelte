@@ -1,17 +1,18 @@
 <script>
   import { link } from 'svelte-routing';
   import { createEventDispatcher } from 'svelte';
+  import { currentPage } from '../../store/index.js';
 
   const dispatch = createEventDispatcher();
 
   export let to = '';
-  export let currentPage = '';
   export let customClass = '';
 
   let className = customClass ? customClass : 'link';
 
   function handleClick() {
-    dispatch('clickedLink', { route: to });
+    currentPage.set(to);
+    dispatch('clickedLink');
   }
 </script>
 
@@ -41,6 +42,6 @@
   }
 </style>
 
-<a on:click={handleClick} use:link class="{className} {currentPage === to ? 'active' : ''}" href={to}>
+<a on:click={handleClick} use:link class="{className} {$currentPage === to ? 'active' : ''}" href={to}>
   <slot />
 </a>

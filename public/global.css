@@ -191,6 +191,12 @@ h2 {
   color: var(--white);
 }
 
+.btn-primary--large {
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 2em auto;
+}
+
 .btn-primary--outline {
   border: 2px solid var(--red);
   background: transparent;

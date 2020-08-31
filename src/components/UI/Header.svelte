@@ -2,15 +2,13 @@
   import NavLink from './NavLink.svelte';
 
   let displayMenu = false;
-  let currentPage = document.location.pathname;
   // TODO:
   let isAuthenticated = false;
 
   function toggleDisplayMenu() {
     displayMenu = !displayMenu;
   }
-  function handleClickedLink(event) {
-    currentPage = event.detail.route;
+  function closeMenu(event) {
     displayMenu = false;
   }
   function handleKeyDown() {}
@@ -124,6 +122,20 @@
   .hamburger:focus {
     outline: none;
   }
+
+  .backdrop {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0);
+    left: -100vw;
+  }
+
+  .backdrop.show {
+    background-color: rgba(0, 0, 0, 0.8);
+    left: 0;
+  }
 </style>
 
 <div class="header">
@@ -143,23 +155,25 @@
     <div aria-hidden="true" />
   </div>
 
+  <div on:click={toggleDisplayMenu} class="backdrop {displayMenu ? 'show' : ''}" />
+
   <nav class="nav {displayMenu ? 'activeMenu' : ''}">
     {#if isAuthenticated}
       <ul class="navList">
         <li>
-          <NavLink to="/" on:clickedLink={handleClickedLink} {currentPage}>Home</NavLink>
+          <NavLink to="/" on:clickedLink={closeMenu}>Home</NavLink>
         </li>
         <li>
-          <NavLink to="/current-program" on:clickedLink={handleClickedLink} {currentPage}>Current program</NavLink>
+          <NavLink to="/current-program" on:clickedLink={closeMenu}>Current program</NavLink>
         </li>
         <li>
-          <NavLink to="/programs" on:clickedLink={handleClickedLink} {currentPage}>Programs</NavLink>
+          <NavLink to="/programs" on:clickedLink={closeMenu}>Programs</NavLink>
         </li>
         <li>
-          <NavLink to="/drills" on:clickedLink={handleClickedLink} {currentPage}>Drills</NavLink>
+          <NavLink to="/drills" on:clickedLink={closeMenu}>Drills</NavLink>
         </li>
         <li>
-          <NavLink to="/account" on:clickedLink={handleClickedLink} {currentPage}>Account</NavLink>
+          <NavLink to="/account" on:clickedLink={closeMenu}>Account</NavLink>
         </li>
         <li class="logoutLi">
           <button on:click={logout} class="btn btn-primary--outline">Log out</button>
@@ -168,20 +182,17 @@
     {:else}
       <ul class="navList">
         <li>
-          <NavLink to="/" on:clickedLink={handleClickedLink} {currentPage}>Home</NavLink>
+          <NavLink to="/" on:clickedLink={closeMenu}>Home</NavLink>
         </li>
         <li>
-          <NavLink to="/about" on:clickedLink={handleClickedLink} {currentPage}>About</NavLink>
+          <NavLink to="/about" on:clickedLink={closeMenu}>About</NavLink>
         </li>
       </ul>
       <div class="navBtns">
-        <NavLink to="/login" on:clickedLink={handleClickedLink} {currentPage} customClass="btn btn-primary">
-          Login
-        </NavLink>
-        <NavLink to="/signup" on:clickedLink={handleClickedLink} {currentPage} customClass="btn btn-primary--outline">
-          Sign up
-        </NavLink>
+        <NavLink to="/login" on:clickedLink={closeMenu} customClass="btn btn-primary">Login</NavLink>
+        <NavLink to="/signup" on:clickedLink={closeMenu} customClass="btn btn-primary--outline">Sign up</NavLink>
       </div>
     {/if}
   </nav>
+
 </div>
