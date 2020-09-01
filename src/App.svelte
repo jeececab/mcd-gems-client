@@ -24,6 +24,9 @@
 
   onMount(async () => {
     auth.set({ ...$auth, loading: true });
+
+    //await new Promise(res => setTimeout(() => res(true), 2000));
+
     const result = await me.result();
 
     if (result.data.me.user) {
