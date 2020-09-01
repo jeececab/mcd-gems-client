@@ -2,13 +2,17 @@
   import ApolloClient from 'apollo-boost';
   import { setClient, query } from 'svelte-apollo';
   import { onMount } from 'svelte';
-  import { Router, Route /* , Link */ } from 'svelte-routing';
+  import { Router, Route } from 'svelte-routing';
   import { ME } from './graphql/queries';
   import { auth } from './store';
   import Header from './components/UI/Header.svelte';
   import Home from './pages/Home.svelte';
   import LogIn from './pages/LogIn.svelte';
   import SignUp from './pages/SignUp.svelte';
+  import LoadingSpinner from './components/UI/LoadingSpinner.svelte';
+  import Message from './components/UI/Message.svelte';
+  import PrivateRoute from './components/Routing/PrivateRoute.svelte';
+  import Account from './pages/Account.svelte';
   export let url = ''; //This property is necessary declare to avoid ignore the Router
 
   const client = new ApolloClient({ uri: 'http://localhost:4000/graphql', credentials: 'include' });
@@ -21,8 +25,9 @@
   onMount(async () => {
     auth.set({ ...$auth, loading: true });
     const result = await me.result();
+
     if (result.data.me.user) {
-      auth.set({ loading: false, logged: true });
+      auth.set({ loading: false, user: result.data.me.user });
     } else {
       auth.set({ ...$auth, loading: false });
     }
@@ -34,18 +39,27 @@
 </style>
 
 {#if $auth.loading}
-  <p>Loading...</p>
+  <LoadingSpinner />
 {:else}
+  <Header />
+
   <Router {url}>
-    <Header />
-    <!-- <nav>
-    <Link to="/">Home</Link>
-    <Link to="signup">SignUp</Link>
-  </nav> -->
-    <Route path="signup" component={SignUp} />
-    <Route path="login" component={LogIn} />
+    <Route path="signup">
+      <SignUp />
+    </Route>
+
+    <Route path="login">
+      <LogIn />
+    </Route>
+
+    <PrivateRoute path="/account">
+      <Account />
+    </PrivateRoute>
+
     <Route path="/">
       <Home />
     </Route>
   </Router>
 {/if}
+
+<Message />

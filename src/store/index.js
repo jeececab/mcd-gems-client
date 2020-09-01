@@ -2,8 +2,8 @@ import { writable } from 'svelte/store';
 
 export const auth = writable({
   loading: false,
-  logged: false
-})
+  user: null
+});
 
 export const message = writable({
   content: '',

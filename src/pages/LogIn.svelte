@@ -6,7 +6,7 @@
   import { LOGIN_USER } from '../graphql/mutations';
 
   onMount(() => {
-    if ($auth.logged) {
+    if ($auth.user) {
       currentPage.set('/account');
       navigate('/account', { replace: true });
     }
@@ -18,13 +18,14 @@
 
   async function handleSubmit() {
     try {
+      auth.set({ ...$auth, loading: true });
       const response = await mutate(client, {
         mutation: LOGIN_USER,
         variables: { email, password }
       });
 
       if (response.data.loginUser.user) {
-        auth.set({ loading: false, logged: true });
+        auth.set({ loading: false, user: response.data.loginUser.user });
         currentPage.set('/account');
         navigate('/account', { replace: true });
       }

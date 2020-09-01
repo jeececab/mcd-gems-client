@@ -157,7 +157,7 @@
   <div on:click={toggleDisplayMenu} class="backdrop {displayMenu ? 'show' : ''}" />
 
   <nav class="nav {displayMenu ? 'activeMenu' : ''}">
-    {#if $auth.logged}
+    {#if $auth.user}
       <ul class="navList">
         <li>
           <NavLink to="/" on:clickedLink={closeMenu}>Home</NavLink>

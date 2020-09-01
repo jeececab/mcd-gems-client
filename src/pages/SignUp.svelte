@@ -1,6 +1,16 @@
 <script>
+  import { onMount } from 'svelte';
+  import { navigate } from 'svelte-routing';
   import { getClient, mutate } from 'svelte-apollo';
+  import { auth, currentPage } from '../store';
   import { REGISTER_USER } from '../graphql/mutations';
+
+  onMount(() => {
+    if ($auth.user) {
+      currentPage.set('/account');
+      navigate('/account', { replace: true });
+    }
+  });
 
   const client = getClient();
   let name = '';
@@ -9,11 +19,19 @@
   let confirmPassword = '';
 
   async function handleSubmit() {
+    auth.set({ ...$auth, loading: true });
+
     try {
-      await mutate(client, {
+      const response = await mutate(client, {
         mutation: REGISTER_USER,
         variables: { name, email, password }
       });
+
+      if (response.data.registerUser.user) {
+        auth.set({ loading: false, user: response.data.registerUser.user });
+        currentPage.set('/account');
+        navigate('account', { replace: true });
+      }
     } catch (e) {
       console.log(e);
     }
