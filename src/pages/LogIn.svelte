@@ -23,9 +23,9 @@
         mutation: LOGIN_USER,
         variables: { email, password }
       });
-
-      if (response.data.loginUser.user) {
-        auth.set({ loading: false, user: response.data.loginUser.user });
+      
+      if (response.data.loginUser) {
+        auth.set({ loading: false, user: response.data.loginUser });
         currentPage.set('/account');
         navigate('/account', { replace: true });
       }

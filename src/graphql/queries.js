@@ -3,11 +3,12 @@ import { gql } from 'apollo-boost';
 export const ME = gql`
   query {
     me {
-      user {
-        name
-        email
+      name
+      email
+      drills {
+        title
+        description
       }
-      error
     }
   }
 `;

@@ -28,7 +28,7 @@
       });
 
       if (response.data.registerUser.user) {
-        auth.set({ loading: false, user: response.data.registerUser.user });
+        auth.set({ loading: false, user: response.data.registerUser });
         currentPage.set('/account');
         navigate('account', { replace: true });
       }

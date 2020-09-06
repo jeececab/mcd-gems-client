@@ -29,8 +29,8 @@
 
     const result = await me.result();
 
-    if (result.data.me.user) {
-      auth.set({ loading: false, user: result.data.me.user });
+    if (result.data.me) {
+      auth.set({ loading: false, user: result.data.me });
     } else {
       auth.set({ ...$auth, loading: false });
     }
@@ -38,7 +38,6 @@
 </script>
 
 <style>
-
 </style>
 
 {#if $auth.loading}
