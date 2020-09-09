@@ -4,6 +4,7 @@ export const ME = gql`
   query {
     me {
       name
+      avatar
       email
       drills {
         title

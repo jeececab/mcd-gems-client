@@ -5,6 +5,7 @@ export const REGISTER_USER = gql`
     registerUser(name: $name, password: $password, email: $email) {
       name
       email
+      avatar
     }
   }
 `;
@@ -14,6 +15,17 @@ export const LOGIN_USER = gql`
     loginUser(password: $password, email: $email) {
       name
       email
+      avatar
+    }
+  }
+`;
+
+export const UPLOAD_AVATAR = gql`
+  mutation uploadAvatar($file: Upload!) {
+    uploadAvatar(file: $file) {
+      name
+      email
+      avatar
     }
   }
 `;

@@ -1,9 +1,11 @@
 <script>
   import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
-  import { getClient, mutate } from 'svelte-apollo';
+  import apolloClient from '../graphql/svelte-apollo';
+  import { getClient, mutate, setClient } from 'svelte-apollo';
   import { auth, currentPage } from '../store';
   import { REGISTER_USER } from '../graphql/mutations';
+  setClient(apolloClient);
 
   onMount(() => {
     if ($auth.user) {

@@ -17,6 +17,9 @@
   },
   "dependencies": {
     "apollo-boost": "^0.4.9",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "^2.6.10",
+    "apollo-upload-client": "^14.1.1",
     "graphql": "^15.3.0",
     "sirv-cli": "^1.0.0",
     "svelte-apollo": "^0.3.0",

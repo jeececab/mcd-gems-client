@@ -1,6 +1,6 @@
 <script>
-  import ApolloClient from 'apollo-boost';
-  import { setClient, query } from 'svelte-apollo';
+  import apolloClient from './graphql/svelte-apollo';
+  import { setClient, query, getClient } from 'svelte-apollo';
   import { onMount } from 'svelte';
   import { Router, Route } from 'svelte-routing';
   import { ME } from './graphql/queries';
@@ -14,24 +14,20 @@
   import PrivateRoute from './components/Routing/PrivateRoute.svelte';
   import Account from './pages/Account.svelte';
   export let url = ''; //This property is necessary declare to avoid ignore the Router
+  setClient(apolloClient);
 
-  const client = new ApolloClient({ uri: 'http://localhost:4000/graphql', credentials: 'include' });
-  setClient(client);
+  const client = getClient();
 
   const me = query(client, {
     query: ME
   });
 
   onMount(async () => {
-    auth.set({ ...$auth, loading: true });
-
-    //await new Promise(res => setTimeout(() => res(true), 2000));
-
-    const result = await me.result();
-
-    if (result.data.me) {
+    try {
+      auth.set({ ...$auth, loading: true });
+      const result = await me.result();
       auth.set({ loading: false, user: result.data.me });
-    } else {
+    } catch (error) {
       auth.set({ ...$auth, loading: false });
     }
   });
