@@ -1,6 +1,5 @@
 <script>
   import { Route } from 'svelte-routing';
-  import LogIn from '../../pages/LogIn.svelte';
   import { auth, currentPage } from '../../store';
   import Redirect from './Redirect.svelte';
 

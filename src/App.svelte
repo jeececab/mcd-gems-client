@@ -42,11 +42,11 @@
   <Header />
 
   <Router {url}>
-    <Route path="signup">
+    <Route path="/signup">
       <SignUp />
     </Route>
 
-    <Route path="login">
+    <Route path="/login">
       <LogIn />
     </Route>
 
