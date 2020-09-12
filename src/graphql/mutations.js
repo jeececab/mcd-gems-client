@@ -20,6 +20,12 @@ export const LOGIN_USER = gql`
   }
 `;
 
+export const LOGOUT_USER = gql`
+  mutation LogoutUser {
+    logoutUser
+  }
+`;
+
 export const UPLOAD_AVATAR = gql`
   mutation uploadAvatar($file: Upload!) {
     uploadAvatar(file: $file) {

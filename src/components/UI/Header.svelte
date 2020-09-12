@@ -1,6 +1,12 @@
 <script>
   import NavLink from './NavLink.svelte';
-  import { auth } from '../../store';
+  import { auth, message, currentPage } from '../../store';
+  import { navigate } from 'svelte-routing';
+  import apolloClient from '../../graphql/svelte-apollo';
+  import { getClient, mutate, setClient } from 'svelte-apollo';
+  import { LOGOUT_USER } from '../../graphql/mutations';
+  setClient(apolloClient);
+  const client = getClient();
 
   let displayMenu = false;
 
@@ -11,7 +17,24 @@
     displayMenu = false;
   }
   function handleKeyDown() {}
-  function logout() {}
+
+  async function logout() {
+    try {
+      auth.set({ ...$auth, loading: true });
+      const response = await mutate(client, {
+        mutation: LOGOUT_USER
+      });
+
+      if (response.data.logoutUser) {
+        auth.set({ loading: false, user: null });
+        currentPage.set('/');
+        navigate('/', { replace: true });
+      }
+    } catch (e) {
+      message.set({ content: e.message.replace('GraphQL error: ', ''), show: true });
+      auth.set({ ...$auth, loading: false });
+    }
+  }
 </script>
 
 <style>

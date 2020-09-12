@@ -2,7 +2,7 @@
   import apolloClient from '../graphql/svelte-apollo';
   import { getClient, mutate, setClient } from 'svelte-apollo';
   import { onMount } from 'svelte';
-  import { auth, currentPage } from '../store';
+  import { auth, currentPage, message } from '../store';
   import { navigate } from 'svelte-routing';
   import { LOGIN_USER } from '../graphql/mutations';
   setClient(apolloClient);
@@ -32,7 +32,8 @@
         navigate('/account', { replace: true });
       }
     } catch (e) {
-      console.log(e);
+      message.set({ content: e.message.replace('GraphQL error: ', ''), show: true });
+      auth.set({ ...$auth, loading: false });
     }
   }
 </script>
