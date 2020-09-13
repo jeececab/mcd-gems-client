@@ -1,11 +1,9 @@
 <script>
-  import apolloClient from '../graphql/svelte-apollo';
-  import { getClient, mutate, setClient } from 'svelte-apollo';
+  import { mutate } from 'svelte-apollo';
   import { onMount } from 'svelte';
-  import { auth, currentPage, message } from '../store';
+  import { auth, currentPage, graphql, message } from '../store';
   import { navigate } from 'svelte-routing';
   import { LOGIN_USER } from '../graphql/mutations';
-  setClient(apolloClient);
 
   onMount(() => {
     if ($auth.user) {
@@ -14,14 +12,13 @@
     }
   });
 
-  const client = getClient();
   let email = '';
   let password = '';
 
   async function handleSubmit() {
     try {
       auth.set({ ...$auth, loading: true });
-      const response = await mutate(client, {
+      const response = await mutate($graphql, {
         mutation: LOGIN_USER,
         variables: { email, password }
       });

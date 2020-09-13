@@ -1,5 +1,7 @@
 import { writable } from 'svelte/store';
 
+export const graphql = writable(null);
+
 export const auth = writable({
   loading: true,
   user: null

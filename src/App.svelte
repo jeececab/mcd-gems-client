@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
   import { Router, Route } from 'svelte-routing';
   import { ME } from './graphql/queries';
-  import { auth } from './store';
+  import { auth, graphql } from './store';
   import Header from './components/UI/Header.svelte';
   import Home from './pages/Home.svelte';
   import LogIn from './pages/LogIn.svelte';
@@ -13,12 +13,13 @@
   import Message from './components/UI/Message.svelte';
   import PrivateRoute from './components/Routing/PrivateRoute.svelte';
   import Account from './pages/Account.svelte';
+
   export let url = ''; //This property is necessary declare to avoid ignore the Router
+
   setClient(apolloClient);
+  graphql.set(getClient())
 
-  const client = getClient();
-
-  const me = query(client, {
+  const me = query($graphql, {
     query: ME
   });
 

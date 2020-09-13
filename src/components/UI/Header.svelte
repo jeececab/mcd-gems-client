@@ -1,19 +1,16 @@
 <script>
   import NavLink from './NavLink.svelte';
-  import { auth, message, currentPage } from '../../store';
+  import { auth, message, currentPage, graphql } from '../../store';
   import { navigate } from 'svelte-routing';
-  import apolloClient from '../../graphql/svelte-apollo';
-  import { getClient, mutate, setClient } from 'svelte-apollo';
+  import { mutate } from 'svelte-apollo';
   import { LOGOUT_USER } from '../../graphql/mutations';
-  setClient(apolloClient);
-  const client = getClient();
 
   let displayMenu = false;
 
   function toggleDisplayMenu() {
     displayMenu = !displayMenu;
   }
-  function closeMenu(event) {
+  function closeMenu() {
     displayMenu = false;
   }
   function handleKeyDown() {}
@@ -21,7 +18,7 @@
   async function logout() {
     try {
       auth.set({ ...$auth, loading: true });
-      const response = await mutate(client, {
+      const response = await mutate($graphql, {
         mutation: LOGOUT_USER
       });
 

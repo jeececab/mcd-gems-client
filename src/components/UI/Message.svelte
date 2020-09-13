@@ -9,9 +9,9 @@
 <style>
   div {
     background: var(--darkblue);
+    padding: 0.5em;
     position: fixed;
     bottom: -60px;
-    height: 60px;
     width: 100%;
     display: flex;
     align-items: center;
@@ -25,6 +25,7 @@
   p {
     font-size: 1.125rem;
     font-weight: bold;
+    line-height: 1.3;
   }
 </style>
 

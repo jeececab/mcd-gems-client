@@ -1,11 +1,7 @@
 <script>
-  import { auth } from '../../store';
-  import { getClient, mutate, setClient } from 'svelte-apollo';
-  import apolloClient from '../../graphql/svelte-apollo';
+  import { auth, graphql } from '../../store';
+  import { mutate } from 'svelte-apollo';
   import { UPLOAD_AVATAR } from '../../graphql/mutations.js';
-  setClient(apolloClient);
-
-  const client = getClient();
 
   let isDisplayed = false;
   let isLoading = false;
@@ -30,7 +26,7 @@
       files: [file]
     } = target;
 
-    const response = await mutate(client, {
+    const response = await mutate($graphql, {
       mutation: UPLOAD_AVATAR,
       variables: { file }
     });

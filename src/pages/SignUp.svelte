@@ -1,11 +1,10 @@
 <script>
   import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
-  import apolloClient from '../graphql/svelte-apollo';
-  import { getClient, mutate, setClient } from 'svelte-apollo';
-  import { auth, currentPage } from '../store';
+  import { mutate } from 'svelte-apollo';
+  import { auth, currentPage, message, graphql } from '../store';
   import { REGISTER_USER } from '../graphql/mutations';
-  setClient(apolloClient);
+  import LoadingSpinner from '../components/UI/LoadingSpinner.svelte';
 
   onMount(() => {
     if ($auth.user) {
@@ -14,28 +13,30 @@
     }
   });
 
-  const client = getClient();
+  let loading = false;
   let name = '';
+  let username = '';
   let email = '';
   let password = '';
   let confirmPassword = '';
 
   async function handleSubmit() {
-    auth.set({ ...$auth, loading: true });
+    loading = true;
 
     try {
-      const response = await mutate(client, {
+      const response = await mutate($graphql, {
         mutation: REGISTER_USER,
-        variables: { name, email, password }
+        variables: { name, username, email, password }
       });
 
-      if (response.data.registerUser.user) {
-        auth.set({ loading: false, user: response.data.registerUser });
+      if (response.data.registerUser) {
+        loading = false;
         currentPage.set('/account');
         navigate('account', { replace: true });
       }
     } catch (e) {
-      console.log(e);
+      message.set({ content: e.message.replace('GraphQL error: ', ''), show: true });
+      loading = false;
     }
   }
 </script>
@@ -63,11 +64,17 @@
 
 <div class="container">
   <h2 class="txt-center">Sign up</h2>
-  <form on:submit|preventDefault={handleSubmit}>
-    <input bind:value={name} type="text" placeholder="Username" required />
-    <input bind:value={email} type="email" placeholder="Email address" required />
-    <input bind:value={password} type="password" placeholder="Password" required />
-    <input bind:value={confirmPassword} type="password" placeholder="Confirm password" required />
-    <button class="btn btn-primary" type="submit">Submit</button>
-  </form>
+
+  {#if loading}
+    <LoadingSpinner />
+  {:else}
+    <form on:submit|preventDefault={handleSubmit}>
+      <input bind:value={name} type="text" placeholder="Name" required />
+      <input bind:value={username} type="text" placeholder="Username" required />
+      <input bind:value={email} type="email" placeholder="Email address" required />
+      <input bind:value={password} type="password" placeholder="Password" required />
+      <input bind:value={confirmPassword} type="password" placeholder="Confirm password" required />
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+  {/if}
 </div>
