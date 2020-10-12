@@ -21,8 +21,10 @@
   }
 
   async function handleChange(target) {
+    isDisplayed = false;
+    isLoading = true
+
     const {
-      validity: { valid },
       files: [file]
     } = target;
 
@@ -32,7 +34,8 @@
     });
 
     auth.set({ ...auth, user: response.data.uploadAvatar });
-    isDisplayed = false;
+
+    isLoading = false;
   }
 </script>
 
@@ -150,7 +153,7 @@
         <div class="modalImgWrapper">
           {#if !isLoading && $auth.user.avatar}
             <img src="data:image/png;base64, {$auth.user.avatar}" alt="Avatar" />
-          {:else}<img src="/images/portrait_placeholder.jpg" alt="Placeholder avatar" />{/if}
+          {:else if !isLoading}<img src="/images/portrait_placeholder.jpg" alt="Placeholder avatar" />{/if}
         </div>
 
         <div class="modalButtons">

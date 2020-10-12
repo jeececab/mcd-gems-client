@@ -1,5 +1,6 @@
 <script>
   import Avatar from '../components/Account/Avatar.svelte';
+  import InfoForm from '../components/Account/InfoForm.svelte';
   import { auth } from '../store';
 
   function deleteAccount() {}
@@ -10,9 +11,9 @@
     display: flex;
     margin-top: 2em;
   }
-  
-  h1 {
-    margin: 0 0 0 0.75em;
+
+  h1, h2 {
+    margin: 0 0 5px 18px;
   }
 </style>
 
@@ -20,9 +21,12 @@
   <div class="content-container">
     <div class="top">
       <Avatar />
-      <h1>{$auth.user.name}</h1>
+      <div>
+        <h1>{$auth.user.name}</h1>
+        <h2>( {$auth.user.username} )</h2>
+      </div>
     </div>
-    <!-- <InfoForm /> -->
+    <InfoForm />
     <!-- <ChangePasswordForm /> -->
     <button on:click={deleteAccount} class="btn btn-primary--outline btn-center"> Delete account </button>
   </div>

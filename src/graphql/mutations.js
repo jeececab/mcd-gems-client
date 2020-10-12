@@ -16,6 +16,7 @@ export const LOGIN_USER = gql`
       name
       username
       email
+      bio
       avatar
     }
   }
@@ -33,6 +34,19 @@ export const UPLOAD_AVATAR = gql`
       name
       username
       email
+      bio
+      avatar
+    }
+  }
+`;
+
+export const UPLOAD_ACCOUNT_INFO = gql`
+  mutation uploadAccountInfo($name: String!, $email: String!, $bio: String!) {
+    uploadAccountInfo(name: $name, email: $email, bio: $bio) {
+      name
+      username
+      email
+      bio
       avatar
     }
   }
