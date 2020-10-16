@@ -1,7 +1,7 @@
 <script>
   import { auth, graphql } from '../../store';
   import { mutate } from 'svelte-apollo';
-  import { UPLOAD_AVATAR } from '../../graphql/mutations.js';
+  import { UPLOAD_AVATAR, DELETE_AVATAR } from '../../graphql/mutations.js';
 
   let isDisplayed = false;
   let isLoading = false;
@@ -15,14 +15,18 @@
   }
 
   async function handleDelete() {
-    console.log('delete');
-    // await delete avatar mutation
+    await mutate($graphql, {
+      mutation: DELETE_AVATAR
+    });
+
+    auth.set({ ...$auth, user: { ...$auth.user, avatar: null } });
+
     toggleModal();
   }
 
   async function handleChange(target) {
     isDisplayed = false;
-    isLoading = true
+    isLoading = true;
 
     const {
       files: [file]
@@ -33,8 +37,7 @@
       variables: { file }
     });
 
-    auth.set({ ...auth, user: response.data.uploadAvatar });
-
+    auth.set({ ...$auth, user: { ...$auth.user, avatar: response.data.uploadAvatar.avatar } });
     isLoading = false;
   }
 </script>
