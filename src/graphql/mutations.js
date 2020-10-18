@@ -31,10 +31,6 @@ export const LOGOUT_USER = gql`
 export const UPLOAD_AVATAR = gql`
   mutation uploadAvatar($file: Upload!) {
     uploadAvatar(file: $file) {
-      name
-      username
-      email
-      bio
       avatar
     }
   }
@@ -55,5 +51,11 @@ export const UPLOAD_ACCOUNT_INFO = gql`
       bio
       avatar
     }
+  }
+`;
+
+export const CHANGE_PASSWORD = gql`
+  mutation changePassword($oldPassword: String!, $newPassword: String!) {
+    changePassword(oldPassword: $oldPassword, newPassword: $newPassword)
   }
 `;
