@@ -13,7 +13,7 @@
     }
   });
 
-  let loading = false;
+  let isLoading = false;
   let name = '';
   let username = '';
   let email = '';
@@ -21,23 +21,24 @@
   let confirmPassword = '';
 
   async function handleSubmit() {
-    loading = true;
-
+    isLoading = true;
     try {
+      auth.set({ ...auth });
       const response = await mutate($graphql, {
         mutation: REGISTER_USER,
         variables: { name, username, email, password }
       });
 
       if (response.data.registerUser) {
-        loading = false;
+        auth.set({ user: response.data.registerUser });
         currentPage.set('/account');
         navigate('account', { replace: true });
       }
     } catch (e) {
       message.set({ content: e.message.replace('GraphQL error: ', ''), show: true });
-      loading = false;
+      auth.set({ ...$auth });
     }
+    isLoading = false;
   }
 </script>
 
@@ -65,7 +66,7 @@
 <div class="container">
   <h2 class="txt-center">Sign up</h2>
 
-  {#if loading}
+  {#if isLoading}
     <LoadingSpinner />
   {:else}
     <form on:submit|preventDefault={handleSubmit}>

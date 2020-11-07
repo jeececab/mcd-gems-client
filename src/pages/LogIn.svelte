@@ -4,6 +4,7 @@
   import { auth, currentPage, graphql, message } from '../store';
   import { navigate } from 'svelte-routing';
   import { LOGIN_USER } from '../graphql/mutations';
+  import LoadingSpinner from '../components/UI/LoadingSpinner.svelte';
 
   onMount(() => {
     if ($auth.user) {
@@ -12,26 +13,31 @@
     }
   });
 
+  let isLoading = false;
   let email = '';
   let password = '';
 
   async function handleSubmit() {
+    isLoading = true;
+
     try {
-      auth.set({ ...$auth, loading: true });
+      auth.set({ ...$auth });
       const response = await mutate($graphql, {
         mutation: LOGIN_USER,
         variables: { email, password }
       });
 
       if (response.data.loginUser) {
-        auth.set({ loading: false, user: response.data.loginUser });
+        auth.set({ user: response.data.loginUser });
         currentPage.set('/account');
         navigate('/account', { replace: true });
       }
     } catch (e) {
       message.set({ content: e.message.replace('GraphQL error: ', ''), show: true });
-      auth.set({ ...$auth, loading: false });
+      auth.set({ ...$auth });
     }
+
+    isLoading = false;
   }
 </script>
 
@@ -55,10 +61,14 @@
   }
 </style>
 
-<div class="container">
-  <form on:submit|preventDefault={handleSubmit} className="form">
-    <input bind:value={email} type="email" placeholder="Email address" required />
-    <input bind:value={password} type="password" placeholder="Password" required />
-    <button class="btn btn-primary" type="submit">Submit</button>
-  </form>
-</div>
+{#if isLoading}
+  <LoadingSpinner />
+{:else}
+  <div class="container">
+    <form on:submit|preventDefault={handleSubmit} className="form">
+      <input bind:value={email} type="email" placeholder="Email address" required />
+      <input bind:value={password} type="password" placeholder="Password" required />
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+  </div>
+{/if}
